@@ -1,14 +1,12 @@
 import React from "react";
 
-// Implement Tile as a stateless component that renders data from the tile object
-export const Tile = ({ tile }) => {
+export const Tile = ({name, description}) => {
   return (
     <div className="tile-container">
-      {Object.values(tile).map((value, index) => (
-        <p key={index} className={`${index === 0 ? "tile-title" : ""} tile`}>
-          {value}
-        </p>
-      ))}
+      <p className="tile-title">{name}</p>
+      {description.forEach( descrip =>{
+        <p> {Object.keys(descrip)} : {Object.values(descrip)}</p>
+      })}
     </div>
   );
 };

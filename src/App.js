@@ -1,77 +1,46 @@
 import React, { useState } from "react";
-import { Switch, Route, Redirect, NavLink } from "react-router-dom";
-
+import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route, Navigate } from "react-router-dom"
+import Root, { ROUTES } from "./components/root/Root";
 import { AppointmentsPage } from "./containers/appointmentsPage/AppointmentsPage";
 import { ContactsPage } from "./containers/contactsPage/ContactsPage";
 
 function App() {
-  //Define state variables
-  const [contacts, setContacts] = useState([]);
-  const [appointments, setAppointments] = useState([]);
+  /*
+  Define state variables for 
+  contacts and appointments 
+  */
+  const [contact, setContact] = useState([])
+  const [appointments, setAppointment] = useState([])
+  /*
+  Implement functions to add data to
+  contacts and appointments
+  */
+ const add_contact = (name, phone, email) => {
+  setContact((prev) => [...prev, {
+    name : name,
+    phone : phone,
+    email : email
+  }])
+ }
+ const add_app = (name, contact, date, time) => {
+  setAppointment((prev) => [...prev, {
+    name : name,
+    contact : contact,
+    date : date,
+    time : time
+  }])
+ }
 
-  const ROUTES = {
-    CONTACTS: "/contacts",
-    APPOINTMENTS: "/appointments",
-  };
-
-  // Add new contacts
-  const addContact = (name, phone, email) => {
-    setContacts([
-      ...contacts,
-      {
-        name: name,
-        phone: phone,
-        email: email
-      }
-    ]);
-  };
-
-  // Add new appointments
-  const addAppointment = (title, contact, date, time) => {
-    setAppointments([
-      ...appointments,
-      {
-        title: title,
-        contact: contact,
-        date: date,
-        time: time
-      }
-    ]);
-  };
-
+  const router = createBrowserRouter(createRoutesFromElements(
+    <Route path="/" element={ <Root/> }>
+      <Route index element={ <Navigate to={ROUTES.CONTACTS} replace/> }/>
+      <Route path={ROUTES.CONTACTS} element={ <ContactsPage contactList = {contact} addContact = {add_contact}/> /* Add props to ContactsPage */ }/>
+      <Route path={ROUTES.APPOINTMENTS} element={ <AppointmentsPage contactList = {contact} appointmentList = {appointments} addApp = {add_app} /> /* Add props to AppointmentsPage */ }/>
+    </Route>
+  ));
+  
   return (
-    <>
-      <nav>
-        <NavLink to={ROUTES.CONTACTS} activeClassName="active">
-          Contacts
-        </NavLink>
-        <NavLink to={ROUTES.APPOINTMENTS} activeClassName="active">
-          Appointments
-        </NavLink>
-      </nav>
-      <main>
-        <Switch>
-          <Route exact path="/">
-            <Redirect to={ROUTES.CONTACTS} />
-          </Route>
-          <Route path={ROUTES.CONTACTS}>
-             {/* Add props to ContactsPage */}
-            <ContactsPage 
-              contacts={contacts} 
-              addContact={addContact} 
-            />
-          </Route>
-          <Route path={ROUTES.APPOINTMENTS}>
-            {/* Add props to AppointmentsPage */}
-            <AppointmentsPage 
-              appointments={appointments}
-              contacts={contacts}
-              addAppointment={addAppointment}
-            />
-          </Route>
-        </Switch>
-      </main>
-    </>
+    <RouterProvider router={router}/>
   );
 }
 

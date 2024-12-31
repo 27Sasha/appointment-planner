@@ -9,55 +9,23 @@ export const ContactForm = ({
   setEmail,
   handleSubmit
 }) => {
+
   return (
-    <form onSubmit={handleSubmit}>
+    <>
+    <form onSubmit = {handleSubmit}>
+      <label htmlFor="name">Name</label>
+      <input type= 'text' id='name' value = {name} onChange={(e) => setName(e.target.value)}></input>
 
-      {/* Contact name input */}
-      <label>
-        <input
-          name="name"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          placeholder="Contact Name"
-        />
-      </label>
-      <br />
+      <label htmlFor="email">Email</label>
+      <input type= 'email' id='email' value = {email} onChange={(e) => setEmail(e.target.value)}></input>
 
-      {/* Phone number input */}
-      <label>
-        <input
-          name="phone"
-          type="tel"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          required
-          placeholder="Phone Number"
-          // Regex for UK mobile numbers
-          pattern="^07([\d]{3})[(\D\s)]?[\d]{3}[(\D\s)]?[\d]{3}$"
-        />
-      </label>
-      <br />
+      <label htmlFor="phone">Number</label>
+      <input type= 'tel' id='phone' value={phone} onChange={(e) => setPhone(e.target.value)} pattern="[1-9][0-9]{2}-[1-9][0-9]{2}-[0-9]{4}"></input>
 
-      {/* Email address input */}
-      <label>
-        <input 
-          name="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          placeholder="Email Address"
-        />
-      </label>
-      <br />
+      <button type='submits'>Submit</button>
 
-      {/* Submit */}
-      <input 
-        type="submit"
-        value="Add Contact"
-      />
     </form>
+    </>
   );
 };
+
